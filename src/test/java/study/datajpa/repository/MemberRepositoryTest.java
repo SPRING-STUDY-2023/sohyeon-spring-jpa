@@ -7,7 +7,9 @@ import static org.springframework.data.domain.Sort.Direction.*;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.PersistenceContext;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,9 @@ class MemberRepositoryTest {
 	MemberRepository memberRepository;
 	@Autowired
 	TeamRepository teamRepository;
+
+	@PersistenceContext
+	EntityManager em;
 
 	@Test
 	public void testMember() {
@@ -177,5 +182,24 @@ class MemberRepositoryTest {
 		assertThat(page.getTotalPages()).isEqualTo(4);
 		assertThat(page.isFirst()).isEqualTo(true);
 		assertThat(page.hasNext()).isEqualTo(true);
+	}
+
+	@Test
+	public void bulkUpTest() {
+		// given
+		for (int i = 0; i < 10; i++) {
+			memberRepository.save(new Member("member" + (i+1), 10 * (i+1)));
+		}
+
+		// when
+		int resultCount = memberRepository.bulkAgePlus(50);
+		// em.flush();
+		// em.clear();
+
+		List<Member> result = memberRepository.findByUsername("member5");
+		System.out.println("member5 = " + result.get(0));
+
+		// then
+		assertThat(resultCount).isEqualTo(6);
 	}
 }
