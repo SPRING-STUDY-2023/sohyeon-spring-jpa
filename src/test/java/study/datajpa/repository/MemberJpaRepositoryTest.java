@@ -79,4 +79,25 @@ class MemberJpaRepositoryTest {
 		assertThat(result.size()).isEqualTo(1);
 	}
 
+	@Test
+	public void paging() {
+		// given
+		for (int i = 0; i < 10; i++) {
+			Member member = new Member("member" + (i + 1), 10);
+			memberJpaRepository.save(member);
+		}
+
+		int age = 10;
+		int offset = 1;
+		int limit = 3;
+
+		// when
+		List<Member> members = memberJpaRepository.findByPage(age, offset, limit);
+		long totalCount = memberJpaRepository.totalCount(age);
+
+		// then
+		assertThat(members.size()).isEqualTo(limit);
+		assertThat(totalCount).isEqualTo(10);
+	}
+
 }
