@@ -87,4 +87,20 @@ class MemberRepositoryTest {
 	public void findTop3ByOrderByAgeDesc() {
 		memberRepository.findTop3ByOrderByAgeDesc();
 	}
+
+	@Test
+	public void testQuery() {
+		Member member1 = new Member("AAA", 10);
+		Member member2 = new Member("AAA", 20);
+		memberRepository.save(member1);
+		memberRepository.save(member2);
+
+		List<Member> result = memberRepository.findUser("AAA", 10);
+
+		for (Member member : result) {
+			assertThat(member.getUsername()).isEqualTo("AAA");
+			assertThat(member.getAge()).isEqualTo(10);
+		}
+		assertThat(result.size()).isEqualTo(1);
+	}
 }
