@@ -67,4 +67,24 @@ class MemberRepositoryTest {
 		assertThat(count).isEqualTo(0);
 	}
 
+	@Test
+	public void findByUsernameAndAgeGraterThen() {
+		Member member1 = new Member("AAA", 10);
+		Member member2 = new Member("AAA", 20);
+		memberRepository.save(member1);
+		memberRepository.save(member2);
+
+		List<Member> result = memberRepository.findByUsernameAndAgeGreaterThan("AAA", 15);
+
+		for (Member member : result) {
+			assertThat(member.getUsername()).isEqualTo("AAA");
+			assertThat(member.getAge() > 15).isEqualTo(true);
+		}
+		assertThat(result.size()).isEqualTo(1);
+	}
+
+	@Test
+	public void findTop3ByOrderByAgeDesc() {
+		memberRepository.findTop3ByOrderByAgeDesc();
+	}
 }
