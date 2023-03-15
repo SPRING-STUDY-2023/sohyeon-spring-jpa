@@ -343,4 +343,24 @@ class MemberRepositoryTest {
 
 		assertThat(result.get(0).getUsername()).isEqualTo("m1");
 	}
+
+	@Test
+	public void projections() {
+		// given
+		Team team = new Team("teamA");
+		em.persist(team);
+
+		Member m1 = new Member("m1", 0, team);
+		Member m2 = new Member("m2", 0, team);
+		em.persist(m1);
+		em.persist(m2);
+
+		em.flush();
+		em.clear();
+
+		// when
+		memberRepository.findProjectionsByUsername("m1")
+			.forEach(member ->
+				System.out.println("usernameOnly => " + member.getUsername() + " " + member.getTeam().getName()));
+	}
 }
