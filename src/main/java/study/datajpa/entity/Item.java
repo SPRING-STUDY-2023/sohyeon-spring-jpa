@@ -16,16 +16,11 @@ import lombok.Getter;
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Getter
-public class Item implements Persistable<String> {
+public class Item {
 
 	@Id @GeneratedValue
 	private Long id;
 
 	@CreatedDate
 	private LocalDateTime createdDate;
-
-	@Override
-	public boolean isNew() {
-		return createdDate == null;
-	}
 }
